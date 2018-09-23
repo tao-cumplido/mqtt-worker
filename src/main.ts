@@ -14,14 +14,26 @@ type ConnectEventHandler = (event: MessageEvent) => void;
 interface SharedWorkerGlobalScope extends WorkerGlobalScope {
     readonly name: string;
     onconnect: null | ((event: MessageEvent) => void);
-    // prettier-ignore
-    addEventListener(type: 'connect', listener: ConnectEventHandler, options?: boolean | AddEventListenerOptions): void;;
-    // prettier-ignore
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;;
-    // prettier-ignore
-    removeEventListener(type: 'connect', listener: ConnectEventHandler, options?: boolean | EventListenerOptions): void;;
-    // prettier-ignore
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    addEventListener(
+        type: 'connect',
+        listener: ConnectEventHandler,
+        options?: boolean | AddEventListenerOptions
+    ): void;
+    addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions
+    ): void;
+    removeEventListener(
+        type: 'connect',
+        listener: ConnectEventHandler,
+        options?: boolean | EventListenerOptions
+    ): void;
+    removeEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | EventListenerOptions
+    ): void;
 }
 
 interface RequestMessageEvent extends MqttWorkerMessageEvent {
@@ -34,14 +46,26 @@ interface RequestMessageEvent extends MqttWorkerMessageEvent {
 }
 
 interface MainPort extends StatusPort {
-    // prettier-ignore
-    addEventListener(type: 'message', listener: (event: RequestMessageEvent) => void, options?: boolean | AddEventListenerOptions): void;;
-    // prettier-ignore
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;;
-    // prettier-ignore
-    removeEventListener(type: 'message', listener: (event: RequestMessageEvent) => void, options?: boolean | EventListenerOptions): void;;
-    // prettier-ignore
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    addEventListener(
+        type: 'message',
+        listener: (event: RequestMessageEvent) => void,
+        options?: boolean | AddEventListenerOptions
+    ): void;
+    addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions
+    ): void;
+    removeEventListener(
+        type: 'message',
+        listener: (event: RequestMessageEvent) => void,
+        options?: boolean | EventListenerOptions
+    ): void;
+    removeEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | EventListenerOptions
+    ): void;
 }
 
 declare var self: SharedWorkerGlobalScope;
