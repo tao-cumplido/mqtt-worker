@@ -8,7 +8,8 @@
         "src/types/*"
     ],
     "scripts": {
-        "build": "tsc --project tsconfig.webpack.json && webpack-cli --config tmp/webpack.config.js"
+        "build": "tsc --project tsconfig.webpack.json && webpack-cli --config tmp/webpack.config.js",
+        "lint": "tslint -p tsconfig.json"
     },
     "author": "Tao Cumplido",
     "license": "MIT",

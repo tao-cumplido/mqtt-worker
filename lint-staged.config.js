@@ -2,6 +2,6 @@ module.exports = {
     ignore: ['package.json', 'package-lock.json'],
     linters: {
         '*.{ts,js,json,md}': ['prettier --write', 'git add'],
-        '*.ts': ['tslint -c tslint.json'],
+        '*.ts': ['tslint -p tsconfig.json'],
     },
 };
