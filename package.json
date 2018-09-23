@@ -2,6 +2,9 @@
     "name": "mqtt-worker",
     "version": "0.0.1",
     "description": "",
+    "author": "Tao Cumplido",
+    "license": "MIT",
+    "repository": "github:tao-cumplido/mqtt-worker",
     "types": "src/types/index.ts",
     "files": [
         "dist/*",
@@ -11,8 +14,6 @@
         "build": "tsc --project tsconfig.webpack.json && webpack-cli --config tmp/webpack.config.js",
         "lint": "tslint -p tsconfig.json"
     },
-    "author": "Tao Cumplido",
-    "license": "MIT",
     "devDependencies": {
         "@types/fs-extra": "^5.0.4",
         "@types/node-fetch": "^2.1.2",
