@@ -7,26 +7,14 @@ import {
 
 export interface WorkerPort extends MessagePort {
     postMessage(message: Message | PingMessage | ErrorMessage): void;
-    addEventListener(
-        type: 'message',
-        listener: (event: MqttWorkerMessageEvent) => void,
-        options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener(
-        type: 'message',
-        listener: (event: MqttWorkerMessageEvent) => void,
-        options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean | EventListenerOptions
-    ): void;
+    // prettier-ignore
+    addEventListener(type: 'message', listener: (event: MqttWorkerMessageEvent) => void, options?: boolean | AddEventListenerOptions): void;;
+    // prettier-ignore
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions ): void;;
+    // prettier-ignore
+    removeEventListener(type: 'message', listener: (event: MqttWorkerMessageEvent) => void, options?: boolean | EventListenerOptions): void;;
+    // prettier-ignore
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 export interface StatusPort extends WorkerPort {
