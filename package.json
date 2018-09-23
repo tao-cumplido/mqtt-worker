@@ -1,0 +1,36 @@
+{
+    "name": "mqtt-worker",
+    "version": "0.0.1",
+    "description": "",
+    "types": "src/types/index.ts",
+    "files": [
+        "dist/*",
+        "src/types/*"
+    ],
+    "scripts": {
+        "build": "tsc --project tsconfig.webpack.json && webpack-cli --config tmp/webpack.config.js"
+    },
+    "author": "Tao Cumplido",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/fs-extra": "^5.0.4",
+        "@types/node-fetch": "^2.1.2",
+        "@types/webpack": "^4.4.12",
+        "awesome-typescript-loader": "^5.2.1",
+        "fs-extra": "^7.0.0",
+        "husky": "^1.0.0-rc.15",
+        "lint-staged": "^7.3.0",
+        "mqtt": "2.18.8",
+        "node-fetch": "^2.2.0",
+        "prettier": "^1.14.3",
+        "tslint": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "typescript": "^2.9.2",
+        "webpack": "^4.19.1",
+        "webpack-cli": "^3.1.0"
+    },
+    "dependencies": {},
+    "peerDependencies": {
+        "mqtt": "2.18.8"
+    }
+}
