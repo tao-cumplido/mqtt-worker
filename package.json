@@ -1,7 +1,14 @@
 {
     "name": "mqtt-worker",
-    "version": "0.0.1",
-    "description": "",
+    "version": "0.0.2",
+    "description": "A wrapper around MQTT.js to share connections and subscriptions in a web worker.",
+    "keywords": [
+        "mqtt",
+        "mqtt.js",
+        "worker",
+        "web worker",
+        "shared worker"
+    ],
     "author": "Tao Cumplido",
     "license": "MIT",
     "repository": "github:tao-cumplido/mqtt-worker",

@@ -70,3 +70,9 @@ export interface MqttPayloadMessage extends Message {
     topic: string;
     payload: Uint8Array;
 }
+
+export type MqttStateMessage =
+    | ErrorMessage
+    | MqttConnectMessage
+    | MqttCloseMessage
+    | MqttOfflineMessage;

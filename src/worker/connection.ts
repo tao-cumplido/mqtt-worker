@@ -5,20 +5,11 @@ import {
 } from 'mqtt';
 
 import {
-    ErrorMessage,
-    MqttCloseMessage,
     MqttConnectionError,
-    MqttConnectMessage,
-    MqttOfflineMessage,
     MqttPayloadMessage,
+    MqttStateMessage,
 } from '@types';
 import { StatusPort } from './port';
-
-type MqttStateMessage =
-    | ErrorMessage
-    | MqttConnectMessage
-    | MqttCloseMessage
-    | MqttOfflineMessage;
 
 interface MqttStatePort extends StatusPort {
     postMessage(message: MqttStateMessage): void;
