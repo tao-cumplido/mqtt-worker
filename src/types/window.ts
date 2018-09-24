@@ -31,7 +31,7 @@ export interface SharedWorkerConstructor {
 }
 
 export interface WindowConnectionEvent extends MessageEvent {
-    data: MqttStateMessage;
+    data: PingMessage | MqttStateMessage;
 }
 
 export interface WindowConnectionPort extends MessagePort {
@@ -42,6 +42,16 @@ export interface WindowConnectionPort extends MessagePort {
             | ConnectRequestMessage
             | CloseRequestMessage
             | PublishRequestMessage
+    ): void;
+    onmessage(event: WindowConnectionEvent): void;
+    addEventListener(
+        type: 'message',
+        listener: (event: WindowConnectionEvent) => void
+    ): void;
+    addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions
     ): void;
 }
 
@@ -60,6 +70,16 @@ export interface WindowSubscriptionPort extends MessagePort {
             | PingMessage
             | SubscribeRequestMessage
             | UnsubscribeRequestMessage
+    ): void;
+    onmessage(event: WindowSubscriptionEvent): void;
+    addEventListener(
+        type: 'message',
+        listener: (event: WindowSubscriptionEvent) => void
+    ): void;
+    addEventListener(
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions
     ): void;
 }
 
