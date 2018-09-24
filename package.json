@@ -1,6 +1,6 @@
 {
     "name": "mqtt-worker",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "A wrapper around MQTT.js to share connections and subscriptions in a web worker.",
     "keywords": [
         "mqtt",
