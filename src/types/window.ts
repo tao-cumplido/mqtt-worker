@@ -2,7 +2,6 @@ import {
     CloseRequestMessage,
     ConnectRequestMessage,
     ErrorMessage,
-    Message,
     MqttPayloadMessage,
     MqttStateMessage,
     PingMessage,
@@ -37,7 +36,6 @@ export interface WindowConnectionEvent extends MessageEvent {
 export interface WindowConnectionPort extends MessagePort {
     postMessage(
         message:
-            | Message
             | PingMessage
             | ConnectRequestMessage
             | CloseRequestMessage
@@ -66,7 +64,6 @@ export interface WindowSubscriptionEvent extends MessageEvent {
 export interface WindowSubscriptionPort extends MessagePort {
     postMessage(
         message:
-            | Message
             | PingMessage
             | SubscribeRequestMessage
             | UnsubscribeRequestMessage
