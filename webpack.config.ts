@@ -4,8 +4,9 @@ import * as path from 'path';
 import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
 import fetch from 'node-fetch';
 import { Configuration } from 'webpack';
+import * as merge from 'webpack-merge';
 
-async function createConfig(): Promise<Configuration> {
+async function createConfig(): Promise<[Configuration, Configuration]> {
     const cwd = process.cwd();
     const webMqttPath = path.join(cwd, 'web-mqtt', 'index.js');
 
@@ -17,8 +18,7 @@ async function createConfig(): Promise<Configuration> {
         await writeFile(webMqttPath, await js.text());
     }
 
-    return {
-        mode: 'production',
+    const base: Configuration = {
         target: 'webworker',
         entry: './src/main.ts',
         module: {
@@ -35,10 +35,25 @@ async function createConfig(): Promise<Configuration> {
             plugins: [new TsConfigPathsPlugin()],
         },
         output: {
-            filename: 'mqtt-worker.js',
             path: path.join(cwd, 'dist'),
         },
     };
+
+    return [
+        merge(base, {
+            mode: 'development',
+            devtool: 'source-map',
+            output: {
+                filename: 'mqtt-worker.js',
+            },
+        }),
+        merge(base, {
+            mode: 'production',
+            output: {
+                filename: 'mqtt-worker.min.js',
+            },
+        }),
+    ];
 }
 
 export default createConfig();
