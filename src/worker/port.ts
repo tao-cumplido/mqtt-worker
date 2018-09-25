@@ -49,11 +49,11 @@ export function monitorPort(
                         port.close();
                         resolve();
                     }, responseTime);
-                }, interval);
 
-                port.postMessage({
-                    type: 'ping',
-                });
+                    port.postMessage({
+                        type: 'ping',
+                    });
+                }, interval);
             };
 
             port.addEventListener('message', ({ data }) => {
