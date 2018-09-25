@@ -50,6 +50,10 @@ export function monitorPort(
                         resolve();
                     }, responseTime);
                 }, interval);
+
+                port.postMessage({
+                    type: 'ping',
+                });
             };
 
             port.addEventListener('message', ({ data }) => {
