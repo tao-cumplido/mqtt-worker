@@ -4,7 +4,7 @@ export function validateSubscriptionTopic(topic: string): RegExp | undefined {
     if (!topic || !validator.test(topic)) return;
 
     const filter = topic
-        .replace('$', '\\$')
+        .replace(/\[|\\|\^|\$|\.|\||\?|\*|\(|\)/g, (c) => `\\${c}`)
         .replace('+', '[^/]*')
         .replace('#', '.*');
 
