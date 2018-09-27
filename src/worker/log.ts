@@ -7,8 +7,7 @@ export function log(name: string, connection: Connection) {
 
     if (!connection.state) {
         state = ['unknown', 'background: rgb(108, 117, 125); color: white;'];
-        // tslint:disable-next-line:curly
-    } else
+    } else {
         switch (connection.state.type) {
             case 'mqtt-connect':
                 state = [
@@ -35,6 +34,7 @@ export function log(name: string, connection: Connection) {
                 ];
                 break;
         }
+    }
 
     console.log(
         `Connection: %c${name}%c | %c ${state[0]} %c | listeners: ${
