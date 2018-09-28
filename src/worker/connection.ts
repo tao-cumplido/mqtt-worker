@@ -52,7 +52,7 @@ export class Connection {
         }
 
         ports.add(port);
-        port.whenDisconnected.then(() => ports.delete(port));
+        port.whenDisconnected.then(() => this.unsubscribe(topic, filter, port));
 
         this.subscriptions.set(filter, ports);
     }
