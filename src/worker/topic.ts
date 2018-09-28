@@ -1,5 +1,5 @@
 export function validateSubscriptionTopic(topic: string): RegExp | undefined {
-    const validator = /^(#|\+|(\$?[^$+#/]*|\+)(\/([^$+#/]*|\+))*(\/+|\/#)?)$/;
+    const validator = /^(#|([^+#/]*|\+)(\/([^+#/]*|\+))*(\/+|\/#)?)$/;
 
     if (!topic || !validator.test(topic)) return;
 
