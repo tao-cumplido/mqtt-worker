@@ -22,6 +22,7 @@ interface MqttPayloadPort extends StatusPort {
 export class Connection {
     listeners = new Set<MqttStatePort>();
     subscriptions = new Map<RegExp, Set<MqttPayloadPort>>();
+    retainCache = new Map<string, MqttPayloadMessage>();
 
     state?: MqttStateMessage;
 
@@ -47,7 +48,13 @@ export class Connection {
     ) {
         const ports = this.subscriptions.get(filter) || new Set();
 
-        if (!ports.size) {
+        if (ports.size) {
+            this.retainCache.forEach((message, retainTopic) => {
+                if (filter.test(retainTopic)) {
+                    port.postMessage(message);
+                }
+            });
+        } else {
             this.client.subscribe(topic, options!);
         }
 
@@ -132,12 +139,16 @@ export class Connection {
             });
         });
 
-        this.client.on('message', (topic, payload) => {
+        this.client.on('message', (topic, payload, packet) => {
             const message: MqttPayloadMessage = {
                 type: 'mqtt-payload',
                 topic,
                 payload,
             };
+
+            if ('retain' in packet && packet.retain) {
+                this.retainCache.set(topic, message);
+            }
 
             this.subscriptions.forEach((ports, filter) => {
                 if (filter.test(topic)) {
