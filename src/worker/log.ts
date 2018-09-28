@@ -2,6 +2,14 @@ import { Connection } from './connection';
 
 // tslint:disable:no-console
 
+function filterToTopic(filter: RegExp): string {
+    return filter.source
+        .slice(1, -1)
+        .replace('.*', '#')
+        .replace('[^/]*', '+')
+        .replace(/\\(\/|\[|\\|\^|\$|\.|\||\?|\*|\(|\))/g, (c) => c.slice(1));
+}
+
 export function log(name: string, connection: Connection) {
     let state!: [string, string];
 
@@ -44,5 +52,14 @@ export function log(name: string, connection: Connection) {
         '',
         state[1],
         ''
+    );
+
+    console.table(
+        [...connection.subscriptions].map(([filter, ports]) => {
+            return {
+                topic: filterToTopic(filter),
+                listeners: ports.size,
+            };
+        })
     );
 }
