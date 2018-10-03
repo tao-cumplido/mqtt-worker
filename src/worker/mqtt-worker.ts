@@ -22,13 +22,7 @@ export class MqttWorker {
 
     constructor() {
         if (process.env.NODE_ENV === 'development') {
-            setInterval(() => {
-                // tslint:disable-next-line:no-console
-                console.clear();
-                this.connections.forEach((connection, name) =>
-                    log(name, connection)
-                );
-            }, 1000);
+            log(this.connections);
         }
     }
 

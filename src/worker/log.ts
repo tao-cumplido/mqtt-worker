@@ -1,6 +1,9 @@
 import { Connection } from './connection';
 
-// tslint:disable:no-console
+interface Subscription {
+    topic: string;
+    listeners: number;
+}
 
 function filterToTopic(filter: RegExp): string {
     return filter.source
@@ -10,56 +13,73 @@ function filterToTopic(filter: RegExp): string {
         .replace(/\\(\/|\[|\\|\^|\$|\.|\||\?|\*|\(|\))/g, (c) => c.slice(1));
 }
 
-export function log(name: string, connection: Connection) {
-    let state!: [string, string];
-
+function getState(connection: Connection): [string, string] {
     if (!connection.state) {
-        state = ['unknown', 'background: rgb(108, 117, 125); color: white;'];
-    } else {
-        switch (connection.state.type) {
-            case 'mqtt-connect':
-                state = [
-                    'connected',
-                    'background: rgb(40, 167, 69); color: white;',
-                ];
-                break;
-            case 'mqtt-close':
-                state = [
-                    'closed',
-                    'background: rgb(23, 162, 184); color: white;',
-                ];
-                break;
-            case 'mqtt-offline':
-                state = [
-                    'offline',
-                    'background: rgb(255, 193, 7); color: rgb(52, 58, 64);',
-                ];
-                break;
-            case 'error':
-                state = [
-                    `error: ${connection.state.error.name}`,
-                    'background: rgb(220, 53, 69); color: white;',
-                ];
-                break;
-        }
+        return ['unknown', 'background: rgb(108, 117, 125); color: white;'];
     }
 
-    console.log(
+    switch (connection.state.type) {
+        case 'mqtt-connect':
+            return ['connected', 'background: rgb(40, 167, 69); color: white;'];
+        case 'mqtt-close':
+            return ['closed', 'background: rgb(23, 162, 184); color: white;'];
+        case 'mqtt-offline':
+            return [
+                'offline',
+                'background: rgb(255, 193, 7); color: rgb(52, 58, 64);',
+            ];
+        case 'error':
+            return [
+                `error: ${connection.state.error.name}`,
+                'background: rgb(220, 53, 69); color: white;',
+            ];
+    }
+}
+
+function getHeader(name: string, connection: Connection): string[] {
+    const state = getState(connection);
+
+    return [
         `Connection: %c${name}%c | %c ${state[0]} %c | listeners: ${
             connection.listeners.size
         }`,
         'font-weight: bolder;',
         '',
         state[1],
-        ''
-    );
+        '',
+    ];
+}
 
-    console.table(
-        [...connection.subscriptions].map(([filter, ports]) => {
-            return {
-                topic: filterToTopic(filter),
-                listeners: ports.size,
-            };
-        })
-    );
+function getSubscriptions(connection: Connection): Subscription[] {
+    return [...connection.subscriptions].map(([filter, ports]) => {
+        return {
+            topic: filterToTopic(filter),
+            listeners: ports.size,
+        };
+    });
+}
+
+// tslint:disable:no-console
+
+export function log(connections: Map<string, Connection>) {
+    let cache: Array<[string[], Subscription[]]> = [];
+
+    setInterval(() => {
+        const next = [...connections].map(([name, connection]) => {
+            return [
+                getHeader(name, connection),
+                getSubscriptions(connection),
+            ] as typeof cache[0];
+        });
+
+        if (JSON.stringify(next) !== JSON.stringify(cache)) {
+            console.clear();
+            next.forEach(([header, subscriptions]) => {
+                console.log(...header);
+                console.table(subscriptions);
+            });
+
+            cache = next;
+        }
+    }, 500);
 }
