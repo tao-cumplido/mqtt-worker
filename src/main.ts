@@ -87,6 +87,8 @@ self.onconnect = ({ ports: [port] }) => {
                 return worker.subscribe(statusPort, data);
             case 'unsubscribe':
                 return worker.unsubscribe(statusPort, data);
+            case 'publish':
+                return worker.publish(statusPort, data);
             case 'close':
                 return worker.close(statusPort, data);
         }
