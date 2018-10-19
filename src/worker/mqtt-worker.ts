@@ -1,4 +1,4 @@
-import { connect as mqttConnect } from 'web-mqtt';
+import { connect as mqttConnect } from 'mqtt';
 
 import {
     CloseRequestMessage,
@@ -27,20 +27,14 @@ export class MqttWorker {
     }
 
     connect(port: StatusPort, { name, url, options }: ConnectRequestMessage) {
-        const connection =
-            this.connections.get(name) ||
-            new Connection(mqttConnect(url, options));
+        const connection = this.connections.get(name) || new Connection(mqttConnect(url, options));
         connection.register(port);
         this.connections.set(name, connection);
     }
 
-    subscribe(
-        port: StatusPort,
-        { connection: name, topic, options }: SubscribeRequestMessage
-    ) {
+    subscribe(port: StatusPort, { connection: name, topic, options }: SubscribeRequestMessage) {
         this.ensureConnection(port, name, (connection) => {
-            const filter =
-                this.filterCache[topic] || validateSubscriptionTopic(topic);
+            const filter = this.filterCache[topic] || validateSubscriptionTopic(topic);
 
             if (!filter) {
                 const error: InvalidTopicError = {
@@ -61,10 +55,7 @@ export class MqttWorker {
         });
     }
 
-    unsubscribe(
-        port: StatusPort,
-        { connection: name, topic }: UnsubscribeRequestMessage
-    ) {
+    unsubscribe(port: StatusPort, { connection: name, topic }: UnsubscribeRequestMessage) {
         this.ensureConnection(port, name, (connection) => {
             const filter = this.filterCache[topic];
 
@@ -86,10 +77,7 @@ export class MqttWorker {
         });
     }
 
-    publish(
-        port: StatusPort,
-        { connection: name, topic, payload, options }: PublishRequestMessage
-    ) {
+    publish(port: StatusPort, { connection: name, topic, payload, options }: PublishRequestMessage) {
         this.ensureConnection(port, name, (connection) => {
             connection.publish(topic, payload, options);
         });
@@ -103,11 +91,7 @@ export class MqttWorker {
         });
     }
 
-    private ensureConnection(
-        port: StatusPort,
-        name: string,
-        callback: (connection: Connection) => void
-    ) {
+    private ensureConnection(port: StatusPort, name: string, callback: (connection: Connection) => void) {
         const connection = this.connections.get(name);
 
         if (connection) {

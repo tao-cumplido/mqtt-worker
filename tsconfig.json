@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "es2015",
+        "module": "commonjs",
         "target": "es2015",
         "moduleResolution": "node",
         "lib": ["es2015", "webworker"],
@@ -10,7 +10,8 @@
         "typeRoots": ["node_modules/@types"],
         "baseUrl": "./",
         "paths": {
-            "web-mqtt": ["web-mqtt/index.js"],
+            "node-mqtt": ["node_modules/mqtt"],
+            "mqtt": ["./mqtt"],
             "@types": ["src/types/index.ts"]
         }
     }

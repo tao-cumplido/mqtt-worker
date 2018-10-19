@@ -1,23 +1,10 @@
-import { pathExists, readJson, writeFile } from 'fs-extra';
 import * as path from 'path';
 
 import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
-import fetch from 'node-fetch';
 import { Configuration } from 'webpack';
 import * as merge from 'webpack-merge';
 
 async function createConfig(): Promise<[Configuration, Configuration]> {
-    const cwd = process.cwd();
-    const webMqttPath = path.join(cwd, 'web-mqtt', 'index.js');
-
-    if (!(await pathExists(webMqttPath))) {
-        const {
-            devDependencies: { mqtt },
-        } = await readJson(path.join(cwd, 'package.json'));
-        const js = await fetch(`https://unpkg.com/mqtt@${mqtt}/dist/mqtt.js`);
-        await writeFile(webMqttPath, await js.text());
-    }
-
     const base: Configuration = {
         target: 'webworker',
         entry: './src/main.ts',
@@ -25,8 +12,11 @@ async function createConfig(): Promise<[Configuration, Configuration]> {
             rules: [
                 {
                     test: /\.ts$/,
-                    use: 'awesome-typescript-loader',
                     exclude: [/node_modules/],
+                    loader: 'awesome-typescript-loader',
+                    query: {
+                        configFileName: './tsconfig.lib.json',
+                    },
                 },
             ],
         },
@@ -35,7 +25,7 @@ async function createConfig(): Promise<[Configuration, Configuration]> {
             plugins: [new TsConfigPathsPlugin()],
         },
         output: {
-            path: path.join(cwd, 'dist'),
+            path: path.join(process.cwd(), 'dist'),
         },
     };
 

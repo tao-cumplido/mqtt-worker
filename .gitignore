@@ -3,4 +3,5 @@
 /tmp
 /dist
 
-web-mqtt/index.js
+mqtt/*
+!mqtt/index.d.ts
