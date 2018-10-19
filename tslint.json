@@ -11,12 +11,7 @@
         "member-ordering": [
             true,
             {
-                "order": [
-                    "static-field",
-                    "static-method",
-                    "instance-field",
-                    "instance-method"
-                ]
+                "order": ["static-field", "static-method", "instance-field", "instance-method"]
             }
         ],
         "no-bitwise": false,
@@ -26,17 +21,7 @@
         "no-non-null-assertion": false,
         "no-redundant-jsdoc": true,
         "no-string-literal": false,
-        "no-submodule-imports": [
-            true,
-            "rxjs",
-            "@angular/platform-browser",
-            "@angular/core/testing",
-            "@angular/router/testing",
-            "@angular/platform-browser-dynamic/testing",
-            "core-js",
-            "zone.js"
-        ],
-
+        "no-submodule-imports": true,
         "no-switch-case-fall-through": true,
         "no-this-assignment": [true, "allow-destructuring"],
         "no-unused-expression": [true, "allow-fast-null-checks"],
