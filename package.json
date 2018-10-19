@@ -23,7 +23,7 @@
         "build": "tsc --project tsconfig.webpack.json && webpack-cli --config tmp/webpack.config.js",
         "test": "ava",
         "lint": "tslint -p tsconfig.json",
-        "postinstall": "ts-node fetch-mqtt.ts"
+        "prepare": "ts-node fetch-mqtt.ts"
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.4",
