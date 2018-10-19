@@ -11,7 +11,6 @@ import {
     UnsubscribeRequestMessage,
 } from '@types';
 import { Connection } from './connection';
-import { log } from './log';
 import { StatusPort } from './port';
 import { validateSubscriptionTopic } from './topic';
 
@@ -19,12 +18,6 @@ export class MqttWorker {
     connections = new Map<string, Connection>();
 
     filterCache: Partial<Record<string, RegExp>> = {};
-
-    constructor() {
-        if (process.env.NODE_ENV === 'development') {
-            log(this.connections);
-        }
-    }
 
     connect(port: StatusPort, { name, url, options }: ConnectRequestMessage) {
         const connection = this.connections.get(name) || new Connection(mqttConnect(url, options));

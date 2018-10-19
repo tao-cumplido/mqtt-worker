@@ -6,6 +6,7 @@ import {
     SubscribeRequestMessage,
     UnsubscribeRequestMessage,
 } from '@types';
+import { log } from './worker/log';
 import { MqttWorker } from './worker/mqtt-worker';
 import { monitorPort, StatusPort } from './worker/port';
 
@@ -63,6 +64,10 @@ interface MainPort extends StatusPort {
 declare var self: SharedWorkerGlobalScope;
 
 const worker = new MqttWorker();
+
+if (process.env.NODE_ENV === 'development') {
+    log(worker.connections);
+}
 
 self.onconnect = ({ ports: [port] }) => {
     const statusPort = monitorPort(port);
