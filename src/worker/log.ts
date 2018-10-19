@@ -24,15 +24,9 @@ function getState(connection: Connection): [string, string] {
         case 'mqtt-close':
             return ['closed', 'background: rgb(23, 162, 184); color: white;'];
         case 'mqtt-offline':
-            return [
-                'offline',
-                'background: rgb(255, 193, 7); color: rgb(52, 58, 64);',
-            ];
+            return ['offline', 'background: rgb(255, 193, 7); color: rgb(52, 58, 64);'];
         case 'error':
-            return [
-                `error: ${connection.state.error.name}`,
-                'background: rgb(220, 53, 69); color: white;',
-            ];
+            return [`error: ${connection.state.error.name}`, 'background: rgb(220, 53, 69); color: white;'];
     }
 }
 
@@ -40,9 +34,7 @@ function getHeader(name: string, connection: Connection): string[] {
     const state = getState(connection);
 
     return [
-        `Connection: %c${name}%c | %c ${state[0]} %c | listeners: ${
-            connection.listeners.size
-        }`,
+        `Connection: %c${name}%c | %c ${state[0]} %c | listeners: ${connection.listeners.size}`,
         'font-weight: bolder;',
         '',
         state[1],
@@ -66,10 +58,7 @@ export function log(connections: Map<string, Connection>) {
 
     setInterval(() => {
         const next = [...connections].map(([name, connection]) => {
-            return [
-                getHeader(name, connection),
-                getSubscriptions(connection),
-            ] as typeof cache[0];
+            return [getHeader(name, connection), getSubscriptions(connection)] as typeof cache[0];
         });
 
         if (JSON.stringify(next) !== JSON.stringify(cache)) {

@@ -1,14 +1,6 @@
-import {
-    IClientPublishOptions,
-    IClientSubscribeOptions,
-    MqttClient,
-} from 'mqtt';
+import { IClientPublishOptions, IClientSubscribeOptions, MqttClient } from 'mqtt';
 
-import {
-    MqttConnectionError,
-    MqttPayloadMessage,
-    MqttStateMessage,
-} from '@types';
+import { MqttConnectionError, MqttPayloadMessage, MqttStateMessage } from '@types';
 import { StatusPort } from './port';
 
 interface MqttStatePort extends StatusPort {
@@ -40,12 +32,7 @@ export class Connection {
         port.whenDisconnected.then(() => this.listeners.delete(port));
     }
 
-    subscribe(
-        topic: string,
-        filter: RegExp,
-        port: MqttPayloadPort,
-        options?: IClientSubscribeOptions
-    ) {
+    subscribe(topic: string, filter: RegExp, port: MqttPayloadPort, options?: IClientSubscribeOptions) {
         const ports = this.subscriptions.get(filter) || new Set();
 
         if (ports.size) {
@@ -77,11 +64,7 @@ export class Connection {
         }
     }
 
-    publish(
-        topic: string,
-        payload: string | Uint8Array,
-        options?: IClientPublishOptions
-    ) {
+    publish(topic: string, payload: string | Uint8Array, options?: IClientPublishOptions) {
         this.client.publish(topic, payload as any, options!);
     }
 

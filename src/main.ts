@@ -14,21 +14,13 @@ type ConnectEventHandler = (event: MessageEvent) => void;
 interface SharedWorkerGlobalScope extends WorkerGlobalScope {
     readonly name: string;
     onconnect: null | ((event: MessageEvent) => void);
-    addEventListener(
-        type: 'connect',
-        listener: ConnectEventHandler,
-        options?: boolean | AddEventListenerOptions
-    ): void;
+    addEventListener(type: 'connect', listener: ConnectEventHandler, options?: boolean | AddEventListenerOptions): void;
     addEventListener(
         type: string,
         listener: EventListenerOrEventListenerObject,
         options?: boolean | AddEventListenerOptions
     ): void;
-    removeEventListener(
-        type: 'connect',
-        listener: ConnectEventHandler,
-        options?: boolean | EventListenerOptions
-    ): void;
+    removeEventListener(type: 'connect', listener: ConnectEventHandler, options?: boolean | EventListenerOptions): void;
     removeEventListener(
         type: string,
         listener: EventListenerOrEventListenerObject,

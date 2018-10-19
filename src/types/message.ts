@@ -1,8 +1,4 @@
-import {
-    IClientOptions,
-    IClientPublishOptions,
-    IClientSubscribeOptions,
-} from 'mqtt';
+import { IClientOptions, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
 
 import { RequestError } from './error';
 
@@ -71,8 +67,4 @@ export interface MqttPayloadMessage extends Message {
     payload: Uint8Array;
 }
 
-export type MqttStateMessage =
-    | ErrorMessage
-    | MqttConnectMessage
-    | MqttCloseMessage
-    | MqttOfflineMessage;
+export type MqttStateMessage = ErrorMessage | MqttConnectMessage | MqttCloseMessage | MqttOfflineMessage;

@@ -1,9 +1,4 @@
-import {
-    ErrorMessage,
-    Message,
-    MqttWorkerMessageEvent,
-    PingMessage,
-} from '@types';
+import { ErrorMessage, Message, MqttWorkerMessageEvent, PingMessage } from '@types';
 
 export interface WorkerPort extends MessagePort {
     postMessage(message: Message | PingMessage | ErrorMessage): void;
@@ -33,11 +28,7 @@ export interface StatusPort extends WorkerPort {
     whenDisconnected: Promise<void>;
 }
 
-export function monitorPort(
-    port: WorkerPort,
-    interval = 5000,
-    responseTime = 1000
-): StatusPort {
+export function monitorPort(port: WorkerPort, interval = 5000, responseTime = 1000): StatusPort {
     // tslint:disable-next-line:prefer-object-spread
     return Object.assign(port, {
         whenDisconnected: new Promise<void>((resolve) => {

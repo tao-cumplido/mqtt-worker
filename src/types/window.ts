@@ -35,17 +35,8 @@ export interface WindowConnectionEvent extends MessageEvent {
 
 export interface WindowConnectionPort extends MessagePort {
     onmessage: null | ((event: WindowConnectionEvent) => void);
-    postMessage(
-        message:
-            | PingMessage
-            | ConnectRequestMessage
-            | CloseRequestMessage
-            | PublishRequestMessage
-    ): void;
-    addEventListener(
-        type: 'message',
-        listener: (event: WindowConnectionEvent) => void
-    ): void;
+    postMessage(message: PingMessage | ConnectRequestMessage | CloseRequestMessage | PublishRequestMessage): void;
+    addEventListener(type: 'message', listener: (event: WindowConnectionEvent) => void): void;
     addEventListener(
         type: string,
         listener: EventListenerOrEventListenerObject,
@@ -63,16 +54,8 @@ export interface WindowSubscriptionEvent extends MessageEvent {
 
 export interface WindowSubscriptionPort extends MessagePort {
     onmessage: null | ((event: WindowSubscriptionEvent) => void);
-    postMessage(
-        message:
-            | PingMessage
-            | SubscribeRequestMessage
-            | UnsubscribeRequestMessage
-    ): void;
-    addEventListener(
-        type: 'message',
-        listener: (event: WindowSubscriptionEvent) => void
-    ): void;
+    postMessage(message: PingMessage | SubscribeRequestMessage | UnsubscribeRequestMessage): void;
+    addEventListener(type: 'message', listener: (event: WindowSubscriptionEvent) => void): void;
     addEventListener(
         type: string,
         listener: EventListenerOrEventListenerObject,
