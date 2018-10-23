@@ -29,14 +29,26 @@ export interface SharedWorkerConstructor {
     new (stringUrl: string, name?: string): SharedWorker;
 }
 
-export interface WindowConnectionEvent extends MessageEvent {
+export interface WindowStateEvent extends MessageEvent {
     data: PingMessage | MqttStateMessage;
 }
 
+export interface WindowSubscriptionEvent extends MessageEvent {
+    data: PingMessage | ErrorMessage | MqttPayloadMessage;
+}
+
 export interface WindowConnectionPort extends MessagePort {
-    onmessage: null | ((event: WindowConnectionEvent) => void);
-    postMessage(message: PingMessage | ConnectRequestMessage | CloseRequestMessage | PublishRequestMessage): void;
-    addEventListener(type: 'message', listener: (event: WindowConnectionEvent) => void): void;
+    onmessage: null | ((event: WindowStateEvent) => void);
+    postMessage(
+        message:
+            | PingMessage
+            | ConnectRequestMessage
+            | CloseRequestMessage
+            | PublishRequestMessage
+            | SubscribeRequestMessage
+            | UnsubscribeRequestMessage
+    ): void;
+    addEventListener(type: 'message', listener: (event: WindowStateEvent | WindowSubscriptionEvent) => void): void;
     addEventListener(
         type: string,
         listener: EventListenerOrEventListenerObject,
@@ -46,23 +58,4 @@ export interface WindowConnectionPort extends MessagePort {
 
 export interface WindowConnectionWorker extends SharedWorker {
     port: WindowConnectionPort;
-}
-
-export interface WindowSubscriptionEvent extends MessageEvent {
-    data: PingMessage | ErrorMessage | MqttPayloadMessage;
-}
-
-export interface WindowSubscriptionPort extends MessagePort {
-    onmessage: null | ((event: WindowSubscriptionEvent) => void);
-    postMessage(message: PingMessage | SubscribeRequestMessage | UnsubscribeRequestMessage): void;
-    addEventListener(type: 'message', listener: (event: WindowSubscriptionEvent) => void): void;
-    addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions
-    ): void;
-}
-
-export interface WindowSubscriptionWorker extends SharedWorker {
-    port: WindowSubscriptionPort;
 }

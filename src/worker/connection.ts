@@ -3,17 +3,13 @@ import { IClientPublishOptions, IClientSubscribeOptions, MqttClient } from 'mqtt
 import { MqttConnectionError, MqttPayloadMessage, MqttStateMessage } from '@types';
 import { StatusPort } from './port';
 
-interface MqttStatePort extends StatusPort {
-    postMessage(message: MqttStateMessage): void;
-}
-
-interface MqttPayloadPort extends StatusPort {
-    postMessage(message: MqttPayloadMessage): void;
+interface MqttConnectionPort extends StatusPort {
+    postMessage(message: MqttStateMessage | MqttPayloadMessage): void;
 }
 
 export class Connection {
-    listeners = new Set<MqttStatePort>();
-    subscriptions = new Map<RegExp, Set<MqttPayloadPort>>();
+    listeners = new Set<MqttConnectionPort>();
+    subscriptions = new Map<RegExp, Set<MqttConnectionPort>>();
     retainCache = new Map<string, MqttPayloadMessage>();
 
     state?: MqttStateMessage;
@@ -22,7 +18,7 @@ export class Connection {
         this.initClient();
     }
 
-    register(port: MqttStatePort) {
+    register(port: MqttConnectionPort) {
         this.listeners.add(port);
 
         if (this.state) {
@@ -32,7 +28,7 @@ export class Connection {
         port.whenDisconnected.then(() => this.listeners.delete(port));
     }
 
-    subscribe(topic: string, filter: RegExp, port: MqttPayloadPort, options?: IClientSubscribeOptions) {
+    subscribe(topic: string, filter: RegExp, port: MqttConnectionPort, options?: IClientSubscribeOptions) {
         const ports = this.subscriptions.get(filter) || new Set();
 
         if (ports.size) {
@@ -51,7 +47,7 @@ export class Connection {
         this.subscriptions.set(filter, ports);
     }
 
-    unsubscribe(topic: string, filter: RegExp, port: MqttPayloadPort) {
+    unsubscribe(topic: string, filter: RegExp, port: MqttConnectionPort) {
         const ports = this.subscriptions.get(filter);
 
         if (!ports) return;
@@ -68,19 +64,10 @@ export class Connection {
         this.client.publish(topic, payload as any, options!);
     }
 
-    close(port: MqttStatePort): boolean {
-        this.listeners.delete(port);
+    close(port: MqttConnectionPort): boolean {
         port.close();
-
-        if (this.listeners.size) return false;
-
-        this.subscriptions.forEach((ports) => {
-            ports.forEach((subscriptionPort) => {
-                subscriptionPort.close();
-            });
-        });
-
-        return true;
+        this.listeners.delete(port);
+        return !this.listeners.size;
     }
 
     private initClient() {

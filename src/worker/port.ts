@@ -28,32 +28,53 @@ export interface StatusPort extends WorkerPort {
     whenDisconnected: Promise<void>;
 }
 
-export function monitorPort(port: WorkerPort, interval = 5000, responseTime = 1000): StatusPort {
-    // tslint:disable-next-line:prefer-object-spread
-    return Object.assign(port, {
-        whenDisconnected: new Promise<void>((resolve) => {
-            let disconnect: any;
+export function monitorPort(port: WorkerPort, interval = 5000, responseTime = 5000): StatusPort {
+    let connected = true;
 
-            const sendRequest = () => {
-                setTimeout(() => {
-                    disconnect = setTimeout(() => {
-                        port.close();
-                        resolve();
-                    }, responseTime);
+    const whenDisconnected = new Promise<void>((resolve) => {
+        let disconnect: any;
 
-                    port.postMessage({
-                        type: 'ping',
-                    });
-                }, interval);
-            };
+        const sendRequest = () => {
+            setTimeout(() => {
+                disconnect = setTimeout(() => {
+                    port.close();
+                    resolve();
+                }, responseTime);
 
-            port.addEventListener('message', ({ data }) => {
-                if (data.type !== 'ping') return;
+                port.postMessage({
+                    type: 'ping',
+                });
+            }, interval);
+        };
+
+        port.addEventListener('message', ({ data }) => {
+            if (data.type !== 'ping') return;
+            if (connected) {
                 clearTimeout(disconnect);
                 sendRequest();
-            });
+            }
+        });
 
-            sendRequest();
-        }),
+        sendRequest();
+    });
+
+    return new Proxy(port as StatusPort, {
+        get: (target: any, property) => {
+            if (property === 'whenDisconnected') {
+                return whenDisconnected;
+            }
+
+            const value = target[property];
+
+            if (typeof value === 'function') {
+                if (property === 'close') {
+                    connected = false;
+                }
+
+                return value.bind(target);
+            }
+
+            return value;
+        },
     });
 }
